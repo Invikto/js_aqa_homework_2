@@ -1,17 +1,22 @@
-// REMOVE THE BELOW CODE BEFORE START THE EXERCISE
-describe('Check app', function () {
-    it('should login', async function () {
-        await browser.url('https://viktor-silakov.github.io/course-sut');
-        await $('#login').setValue('walker@jw.com');
-        await $('#password').setValue('password');
-        await $('button').click();
-        await $('#spinner').waitForDisplayed({ reverse: false, timeout: 5000 });
-        await browser.pause(15000);
-        const title = await browser.getTitle();
-        if (title !== 'Report portal') {
-            throw new Error('You don`t login into system!!!')
-        }
-    });
+const logInTheApp = require("../utils/log-in-the-app.js").logInTheApp;
+
+describe('Navigation menu', function () {
+
+	before('Log in the app', async function () {
+		await logInTheApp();
+	});
+
+	it('All menu items have non-red background-color', async function () {
+		const menuItems = await $('#first-nav-block').$$('li');
+		for (const item of menuItems) {
+			item.moveTo();
+			await browser.pause(500);
+			const backgroundColor = await item.getCSSProperty('background-color');
+			const text = await item.$('a').getText();
+			if (backgroundColor.value === 'rgba(255,0,0,1)') {
+				throw new Error(`The menu item ${text} has wrong color!`);
+			}
+		}
+	});
+
 });
-
-
