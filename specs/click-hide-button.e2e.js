@@ -15,6 +15,7 @@ describe('Header', function () {
 		await browser.execute(function (element) {
 			element.click();
 		}, alertButton);
+		await browser.pause(500);
 		await browser.acceptAlert();
 	});
 
